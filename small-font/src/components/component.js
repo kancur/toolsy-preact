@@ -58,7 +58,7 @@ function ResultBox(props) {
 
   return (
     <Fragment>
-      <div class="box level is-relative" style={{fontFamily: "Arial, Helvetica, sans-serif"}}>
+      <div class="box level is-relative" style={{fontFamily: "auto"}}>
         <div class="mb-0">
           <h2 class="title is-3 has-text-danger">{props.heading}</h2>
           <p style={{ ...pstyle, backgroundColor: flash ? "#cce6ff" : "white" }} background class="is-size-4">
