@@ -47,6 +47,9 @@
     ]
   },
   "dependencies": {
-    "react-icons": "^4.2.0"
+    "react-icons": "^4.2.0",
+    "react-spring": "^9.1.2",
+    "react-use-measure": "^2.0.4",
+    "webpack-bundle-analyzer": "^4.4.1"
   }
 }

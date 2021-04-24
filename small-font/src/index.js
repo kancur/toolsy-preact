@@ -2,7 +2,7 @@ import habitat from "preact-habitat";
 import { render } from 'preact';
 
 
-import Widget from "./components/component";
+import Widget from "./components/App";
 
 let _habitat = habitat(Widget);
 
