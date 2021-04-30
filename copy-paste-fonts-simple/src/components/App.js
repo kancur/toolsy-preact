@@ -3,14 +3,15 @@ import { copyTextToClipboard } from '../copyToClipboard'
 import { useSpring, animated } from 'react-spring';
 import useMeasure from 'react-use-measure';
 import { MyTextInput } from './MyTextInput';
-import { CopyButton } from './CopyButton';
+import { CopyWithIcon } from './CopyButton';
 import { addSymbolBetweenChars, convertText, encloseCharBetweenSymbols, encloseCharBetweenWords, encloseInSymbols, unicodeCombine } from '../unicodeConverter';
 import { TABLES } from '../conversionData';
-
 import { RibbonTopLeft } from './RibbonTopLeft';
+import { useMediaQuery } from 'react-responsive'
+
 
 export default function App() {
-  const [text, setText] = useState("Copy and paste fonts");
+  const [text, setText] = useState("copy and paste fonts");
 
   if (!text) {
     setText("Copy and paste fonts")
@@ -53,8 +54,14 @@ export default function App() {
 function ResultBox({ribbonProperties, ...props}) {
   const [copied, setCopied] = useState()
   const [flash, setFlash] = useState()
-  const [bind, { height }] = useMeasure()
+  const [bind, { height, width }] = useMeasure()
   const heightprops = useSpring({ height: (height == 0) ? 36 : height })
+  const isMobile = useMediaQuery({
+    query: '(max-device-width: 768px)'
+  })
+  const isTiny = useMediaQuery({
+    query: '(max-device-width: 468px)'
+  })
 
   const copyClipboard = (text) => {
     copyTextToClipboard(text)
@@ -71,6 +78,11 @@ function ResultBox({ribbonProperties, ...props}) {
     lineHeight: 1.4,
     padding: "8px",
     fontSize: "20px",
+  }
+
+  const copyButtonStyles = {
+    minWidth: isMobile ? 80 : 250,
+    cursor: "pointer"
   }
 
   return (
@@ -92,11 +104,11 @@ function ResultBox({ribbonProperties, ...props}) {
 
       <div class="level">
         <button
-          style="min-width: 166px; cursor: pointer;"
+          style={copyButtonStyles}
           disabled={copied}
           onClick={() => copyClipboard(props.children)}
           class="button is-link p-2" id={props.heading}>
-          {copied ? "Copied" : CopyButton}
+          {copied ? "Copied" : <CopyWithIcon>{isMobile ? "Copy" : "Copy to clipboard"}</CopyWithIcon>}
         </button>
       </div>
     </div>
