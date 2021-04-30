@@ -1,5 +1,11 @@
+const memoize = require('fast-memoize')
+
+const convertToArray = function (text) {return Array.from(text)}
+const memoizedArray = memoize(convertToArray);
+const x = "Peter Smid"
+
 export function convertText(text, datatable) {
-  const originalTextArray = Array.from(text)
+  const originalTextArray = memoizedArray(text)
   const convertedText = originalTextArray.map(character => {
     if (character in datatable.data) {
       return datatable.data[character]
@@ -10,15 +16,14 @@ export function convertText(text, datatable) {
     return character
   }).join('')
 
-  return convertedText.normalize()
+  return convertedText
 }
 
 
 export function addSymbolBetweenChars(text, symbol) {
-  text = text.normalize()
   let newtext = []
 
-  const originalTextArray = Array.from(text)
+  const originalTextArray = memoizedArray(text)
 
   originalTextArray.map((character, index, array) => {
     const previousCharacter = array[index - 1]
@@ -45,10 +50,9 @@ function testCharacterIsAlphanumeric(character) {
 }
 
 export function encloseCharBetweenSymbols(text, symbolRight, symbolLeft) {
-  text = text.normalize()
   let newtext = []
 
-  const originalTextArray = Array.from(text)
+  const originalTextArray = memoizedArray(text)
 
   originalTextArray.map((character) => {
     if ((testCharacterIsAlphanumeric(character))) {
@@ -66,10 +70,9 @@ export function encloseCharBetweenSymbols(text, symbolRight, symbolLeft) {
 }
 
 export function encloseCharBetweenWords(text, symbolLeft, symbolRight) {
-  text = text.normalize()
   let newtext = []
 
-  const originalTextArray = Array.from(text)
+  const originalTextArray = memoizedArray(text)
 
   originalTextArray.map((character, index, array) => {
     const nextCharacter = array[index + 1]
@@ -92,10 +95,9 @@ export function encloseCharBetweenWords(text, symbolLeft, symbolRight) {
 }
 
 export function unicodeCombine(text, characterCodes) {
-  text = text.normalize()
   let newtext = []
 
-  const originalTextArray = Array.from(text)
+  const originalTextArray = memoizedArray(text)
 
   originalTextArray.map((character) => {
     const pimpedChar = character + characterCodes
@@ -105,6 +107,5 @@ export function unicodeCombine(text, characterCodes) {
 }
 
 export function encloseInSymbols(text, symbolLeft, symbolRight) {
-  text = text.normalize()
   return symbolLeft + text + symbolRight
 }

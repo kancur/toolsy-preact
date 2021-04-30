@@ -82,7 +82,7 @@ function ResultBox({ribbonProperties, ...props}) {
 
         <div ref={bind} class="is-relative" style={{ fontFamily: "auto", height: "auto" }}>
           <div class="mb-0">
-            <p style={{ ...pstyle, backgroundColor: flash ? "#cce6ff" : "white" }} background class="mr-3 ml-4">
+            <p style={{ ...pstyle, backgroundColor: (flash ? "#cce6ff" : "white") }} background class="mr-3 ml-4">
               {props.children}
             </p>
           </div>
