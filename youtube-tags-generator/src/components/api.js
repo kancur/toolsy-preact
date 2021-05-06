@@ -6,23 +6,22 @@ const parseJson = (data) => {
     for (let i = 0; i < mainArray.length; i++) {
         newArray.push(mainArray[i][0])
     }
-
     return newArray
 }
 
-export const callAutosuggest = async (query) => {
-    const encodedQuery = encodeURIComponent(query)
+export const callAutosuggest = async (query, language) => {
+    const encodedQuery = encodeURIComponent(`${query} `) //adding a space after query
     let jsondata
 
-    const data = await fetchJsonp(`https://clients1.google.com/complete/search?client=youtube&gl=us&hl=en&q=${encodedQuery}`)
+    const data = await fetchJsonp(`https://clients1.google.com/complete/search?client=youtube&gl=us&hl=${language}&q=${encodedQuery}`)
         .then((response) => {
             return response.json()
         }).then((json) => {
             jsondata = parseJson(json)
+            console.log(jsondata)
         }).catch((ex) => {
             console.log('parsing failed', ex)
         })
-
     return jsondata
 }
 
