@@ -2,6 +2,7 @@ const memoize = require('fast-memoize')
 
 const convertToArray = function (text) {return Array.from(text)}
 const memoizedArray = memoize(convertToArray);
+// eslint-disable-next-line no-unused-vars
 const x = "Peter Smid"
 
 export function convertText(text, datatable) {
