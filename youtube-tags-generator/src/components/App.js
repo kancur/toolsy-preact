@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'preact/hooks'
-import { copyTextToClipboard } from '../copyToClipboard'
+import { useState } from 'preact/hooks'
+import { CopyToClipboardButton } from '../copyToClipboard'
 import { useSpring, useTransition, animated } from 'react-spring';
 import useMeasure from 'react-use-measure';
 import { InputForm } from './MyTextInput';
@@ -11,9 +11,11 @@ const memoize = require('fast-memoize')
 export default function App() {
   const [submittedText, setSubmittedText] = useState()
   const [tags, setTags] = useState()
+  const [isResultsOpen, setIsResultsOpen] = useState(false)
   const NUMBER_OF_RUNS = 8
 
-  const tagWorker = (NUMBER_OF_RUNS, query, languageCode) => {
+
+  const tagWorker = (query, languageCode) => {
     const tagsArray = [query];
     getTags(tagsArray, 0, languageCode)
   }
@@ -26,12 +28,13 @@ export default function App() {
     if (counter < NUMBER_OF_RUNS && arrayWithTags[counter]) {
       callAutosuggest(arrayWithTags[counter], languageCode)
         .then(response => {
-          if (counter == 0) { tempArray = [] }
-          response.forEach((phrase) => { if (wordCount(phrase) < 5) { tempArray.push(phrase) } })
-          //tempArray.push(...response)
+          if (counter == 0) { tempArray = [] } // deletes the original query from the array
+          response.forEach((phrase) => { if (wordCount(phrase) < 5) { tempArray.push(phrase) } }) // wordcount limiting is here
+          //tempArray.push(...response) //without wordcount limiting
         })
+        .then(() => setIsResultsOpen(true))
         .then(() => setTags(tempArray))
-        .then(() => getTags(tempArray, counter + 1))
+        .then(() => getTags(tempArray, counter + 1, languageCode))
     }
   }
 
@@ -39,11 +42,13 @@ export default function App() {
     return str.split(" ").length;
   }
 
+  
   const handleSubmit = (inputText, languageCode) => {
     const trimmedWhitespacesText = (inputText.replace(/  +/g, ' ')).trim(); //replace multiple spaces with one
-    setSubmittedText(trimmedWhitespacesText) //trime leading and trailing whitespaces
+    setSubmittedText(trimmedWhitespacesText)
+    setIsResultsOpen(false)
     setTags([])
-    tagWorkerMemoized(5, trimmedWhitespacesText.trim(), languageCode)
+    tagWorkerMemoized(trimmedWhitespacesText.trim(), languageCode)
   }
 
 
@@ -53,7 +58,7 @@ export default function App() {
         <h2 class="title is-2 has-text-primary">Enter a keyword</h2>
         <InputForm handleSubmit={handleSubmit} />
       </div>
-      {tags && <TagsBox tags={tags} query={submittedText} />}
+      {tags && <TagsBox isOpen={isResultsOpen} tags={tags} query={submittedText} />}
     </div>
   );
 }
@@ -64,7 +69,7 @@ function TagsBox(props) {
   const heightprops = useSpring({ height: (height == 0) ? 0 : height })
   let finalTagsArray
 
-  const transitions = useTransition(!!props.tags.length, {
+  const transitions = useTransition((!!props.isOpen), {
     from: { opacity: 0 },
     enter: { opacity: 1, delay: 30 },
     leave: { opacity: 0, delay: 330 },
@@ -75,7 +80,8 @@ function TagsBox(props) {
     const colorizedTag = colorizeWord(props.query, tag)
     return (
       <SingleTag key={i} colorizedTag={colorizedTag} />
-      )}
+    )
+  }
   )
 
   return (transitions(
@@ -84,8 +90,14 @@ function TagsBox(props) {
         <div class="box is-flex is-flex-direction-row is-justify-content-space-between is-align-items-center is-relative">
           <animated.div style={{ overflow: 'hidden', ...heightprops }}>
             <div ref={bind} class="is-relative" style={{ height: "auto" }}>
+              {!props.tags.length && <p class="is-size-5 has-text-danger">No result for your query. Please try another one.</p>}
               <TagsList tags={finalTagsArray} />
-              {!!props.tags.length && (<div class="has-text-centered"><button onClick={() => { copyTextToClipboard(props.tags.join(', \n')) }} class="button is-link">Copy to clipboard</button></div>)}
+              
+              {!!props.tags.length && 
+                <div class="has-text-centered">
+                <CopyToClipboardButton text={props.tags.join(', \n')} />
+                </div>
+              }
             </div>
           </animated.div>
         </div>
@@ -100,13 +112,4 @@ const TagsList = (props) =>
     {props.tags}
   </div>;
 
-const SingleTag = (props) =>  <span class="tag" style={"white-space: pre;"}>{props.colorizedTag}</span>
-
-
-function usePrevious(value) {
-  const ref = useRef();
-  useEffect(() => {
-    ref.current = value;
-  });
-  return ref.current;
-}
+const SingleTag = (props) => <span class="tag" style={"white-space: pre;"}>{props.colorizedTag}</span>
