@@ -41,6 +41,6 @@ export const CopyToClipboardButton = ({text}) => {
   }
 
   return (
-    <button onClick={handleClick} class="button is-link">{!isCopied ? "Copy to clipboard" : "COPIED"}</button>
+    <button style="width: 150px" onClick={handleClick} class="button is-link">{!isCopied ? "Copy to clipboard" : "COPIED"}</button>
   )
 }

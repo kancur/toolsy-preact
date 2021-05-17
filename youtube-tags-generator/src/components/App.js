@@ -12,7 +12,8 @@ export default function App() {
   const [submittedText, setSubmittedText] = useState()
   const [tags, setTags] = useState()
   const [isResultsOpen, setIsResultsOpen] = useState(false)
-  const NUMBER_OF_RUNS = 8
+  const [isAPIworkerFinished, setIsAPIworkerFinished] = useState(false)
+  const NUMBER_OF_RUNS = 5
 
 
   const tagWorker = (query, languageCode) => {
@@ -35,6 +36,8 @@ export default function App() {
         .then(() => setIsResultsOpen(true))
         .then(() => setTags(tempArray))
         .then(() => getTags(tempArray, counter + 1, languageCode))
+    } else {
+      setIsAPIworkerFinished(true)
     }
   }
 
@@ -44,11 +47,14 @@ export default function App() {
 
   
   const handleSubmit = (inputText, languageCode) => {
-    const trimmedWhitespacesText = (inputText.replace(/  +/g, ' ')).trim(); //replace multiple spaces with one
-    setSubmittedText(trimmedWhitespacesText)
-    setIsResultsOpen(false)
-    setTags([])
-    tagWorkerMemoized(trimmedWhitespacesText.trim(), languageCode)
+    if (inputText.length != 0){
+      const trimmedWhitespacesText = (inputText.replace(/  +/g, ' ')).trim(); //replace multiple spaces with one
+      setSubmittedText(trimmedWhitespacesText)
+      setIsAPIworkerFinished(false)
+      setIsResultsOpen(false)
+      setTags([])
+      tagWorkerMemoized(trimmedWhitespacesText.trim(), languageCode)
+    }
   }
 
 
@@ -58,7 +64,7 @@ export default function App() {
         <h2 class="title is-2 has-text-primary">Enter a keyword</h2>
         <InputForm handleSubmit={handleSubmit} />
       </div>
-      {tags && <TagsBox isOpen={isResultsOpen} tags={tags} query={submittedText} />}
+      {tags && <TagsBox isOpen={isResultsOpen} isLoaded={isAPIworkerFinished} tags={tags} query={submittedText} />}
     </div>
   );
 }
@@ -90,7 +96,7 @@ function TagsBox(props) {
         <div class="box is-flex is-flex-direction-row is-justify-content-space-between is-align-items-center is-relative">
           <animated.div style={{ overflow: 'hidden', ...heightprops }}>
             <div ref={bind} class="is-relative" style={{ height: "auto" }}>
-              {!props.tags.length && <p class="is-size-5 has-text-danger">No result for your query. Please try another one.</p>}
+              {!props.tags.length && props.isLoaded && <p class="is-size-5 has-text-danger">No result for your query. Please try another one.</p>}
               <TagsList tags={finalTagsArray} />
               
               {!!props.tags.length && 

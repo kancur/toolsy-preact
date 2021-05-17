@@ -3,8 +3,8 @@ module.exports = function(config) {
   config.output.chunkFilename = '[name].chunk.js';
 };
 
-export default (config, env, helpers) => {
+/* export default (config, env, helpers) => {
   if (env.isProd) {
     config.devtool = false;
   }
-}
+} */
