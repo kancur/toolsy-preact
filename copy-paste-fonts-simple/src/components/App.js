@@ -8,6 +8,7 @@ import { addSymbolBetweenChars, convertText, encloseCharBetweenSymbols, encloseC
 import { TABLES } from '../conversionData';
 import { RibbonTopLeft } from './RibbonTopLeft';
 import { useMediaQuery } from 'react-responsive'
+import { memo } from 'preact/compat';
 
 
 export default function App() {
@@ -54,18 +55,21 @@ export default function App() {
 }
 
 function ResultBox({ribbonProperties, ...props}) {
-  const [copied, setCopied] = useState()
-  const [flash, setFlash] = useState()
   const [bind, { height }] = useMeasure()
-  const heightprops = useSpring({ height: (height == 0) ? 36 : height })
+  const [copied, setCopied] = useState(false)
+  const [flash, setFlash] = useState(false)
+  const heightprops = useSpring({ height: (height == 0) ? 84 : height })
   
   const isMobile = useMediaQuery({
     query: '(max-device-width: 768px)'
   })
 
+  const getChildren = () => {
+    return(props.children)
+  }
 
-  const copyClipboard = (text) => {
-    copyTextToClipboard(text)
+  const copyToClipboard = () => {
+    copyTextToClipboard("hovno")
     setCopied(true)
     setFlash(true)
     setTimeout(() => { setCopied(false) }, 500);
@@ -79,12 +83,6 @@ function ResultBox({ribbonProperties, ...props}) {
     lineHeight: 1.4,
     padding: "8px",
     fontSize: "20px",
-  }
-
-  const copyButtonStyles = {
-    minWidth: isMobile ? 80 : 170,
-    cursor: "pointer",
-    marginRight: "1.25rem"
   }
 
   return (
@@ -105,20 +103,31 @@ function ResultBox({ribbonProperties, ...props}) {
       </animated.div>
 
       <div class="level">
-        <CopyButtonX copyButtonStyles={copyButtonStyles} copied={copied} copyClipboard={copyClipboard} data={props} isMobile={isMobile} />
+        <MemoedCopyButton copied={copied} copyToClipboard={copyToClipboard} isMobile={isMobile} />
       </div>
     </div>
   )
 }
 
 
-const CopyButtonX = ({copyButtonStyles, copied, copyClipboard, data, isMobile}) => {
+const CopyButtonX = ({copied, copyToClipboard, isMobile}) => {
+  
+  const copyButtonStyles = {
+    minWidth: isMobile ? 80 : 170,
+    cursor: "pointer",
+    marginRight: "1.25rem"
+  }
+
   return <button
     style={copyButtonStyles}
     disabled={copied}
-    onClick={() => copyClipboard(data.children)}
-    class="button is-link p-2" id={data.heading}>
+    onClick={() => copyToClipboard()}
+    class="button is-link p-2" >
     {copied ? "Copied" : <CopyWithIcon>{isMobile ? "Copy" : "Copy to clipboard"}</CopyWithIcon>}
   </button>;
 }
 
+const MemoedCopyButton = memo(CopyButtonX, (prevProps, nextProps) => {
+  // Only re-render when `copied' changes
+  return prevProps.copied === nextProps.copied && prevProps.isMobile === nextProps.isMobile;
+})
