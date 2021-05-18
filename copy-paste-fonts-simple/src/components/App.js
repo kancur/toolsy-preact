@@ -43,6 +43,8 @@ export default function App() {
       <ResultBox ribbonProperties={{label:"♡♡♡", color:"#E81224"}}>{encloseCharBetweenWords(text, '❤️', '❤️')}</ResultBox>
       <ResultBox>{unicodeCombine(text, "\u0305\u0332\u0308")}</ResultBox>
       <ResultBox>{unicodeCombine(text, "\u034E\u0329\u0329\u0329")}</ResultBox>
+      <ResultBox>{unicodeCombine(text, "\u033D")}</ResultBox>
+      <ResultBox>{unicodeCombine(text, "\u0359\u0359\u0359\u0359\u0359\u0359\u0359")}</ResultBox>
       <ResultBox>{unicodeCombine(convertText(text, TABLES['MATHEMATICAL_SCRIPT']), '\u033C')}</ResultBox> 
       <ResultBox>{unicodeCombine(text, "\u0336")}</ResultBox>
       <ResultBox>{encloseInSymbols(text, "ᐅᐅᐅ ", " ᐊᐊᐊ")}</ResultBox>
@@ -81,18 +83,19 @@ function ResultBox({ribbonProperties, ...props}) {
 
   const copyButtonStyles = {
     minWidth: isMobile ? 80 : 170,
-    cursor: "pointer"
+    cursor: "pointer",
+    marginRight: "1.25rem"
   }
 
   return (
-    <div class="box is-flex is-flex-direction-row is-justify-content-space-between is-align-items-center is-relative">
+    <div style="padding: 0" class="box is-flex is-flex-direction-row is-justify-content-space-between is-align-items-center is-relative">
       
       {ribbonProperties && <RibbonTopLeft color={ribbonProperties.color}>{ribbonProperties.label}</RibbonTopLeft>}
       
       <animated.div style={{ overflow: 'hidden', ...heightprops }}>
 
         <div ref={bind} class="is-relative" style={{ fontFamily: "auto", height: "auto" }}>
-          <div class="mb-0">
+          <div class="mb-0" style="padding: 1.25rem">
             <p style={{ ...pstyle, backgroundColor: (flash ? "#cce6ff" : "white") }} background class="mr-3 ml-4">
               {props.children}
             </p>
