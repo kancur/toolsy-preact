@@ -2,7 +2,7 @@ import { useState } from 'preact/hooks'
 import { CopyToClipboardButton } from '../copyToClipboard'
 import { useSpring, useTransition, animated } from 'react-spring';
 import useMeasure from 'react-use-measure';
-import { InputForm } from './MyTextInput';
+import { InputForm } from './InputForm';
 import { callAutosuggest } from './api';
 import { colorizeWord } from './colorizeWord';
 const memoize = require('fast-memoize')
@@ -61,7 +61,6 @@ export default function App() {
   return (
     <div class="block" style={{ maxWidth: "800px" }}>
       <div class="box">
-        <h2 class="title is-2 has-text-primary">Enter a keyword</h2>
         <InputForm handleSubmit={handleSubmit} />
       </div>
       {tags && <TagsBox isOpen={isResultsOpen} isLoaded={isAPIworkerFinished} tags={tags} query={submittedText} />}
@@ -99,7 +98,7 @@ function TagsBox(props) {
               {!props.tags.length && props.isLoaded && <p class="is-size-5 has-text-danger">No result for your query. Please try another one.</p>}
               <TagsList tags={finalTagsArray} />
               
-              {!!props.tags.length && 
+              {!!props.tags.length && props.isLoaded && 
                 <div class="has-text-centered">
                 <CopyToClipboardButton text={props.tags.join(', \n')} />
                 </div>

@@ -22,7 +22,7 @@ export function InputForm({ handleSubmit }) {
             maxLength="50"
             class="input"
             type="text"
-            placeholder="Enter a seed keyword or seed phrase"
+            placeholder="Enter a keyword"
             onInput={e => setInputText(e.target.value)}
           />
         </div>
@@ -32,7 +32,7 @@ export function InputForm({ handleSubmit }) {
         {
           !isSmall &&
           <div class="control">
-            <button type="submit" class="button is-danger">
+            <button type="submit" class="button is-primary">
               Generate tags
             </button>
           </div>
@@ -41,7 +41,7 @@ export function InputForm({ handleSubmit }) {
       {
         isSmall &&
         <div class="control is-expanded">
-            <button type="submit" class="button is-danger is-fullwidth">
+            <button type="submit" class="button is-primary is-fullwidth">
               Generate tags
             </button>
         </div>
@@ -50,6 +50,9 @@ export function InputForm({ handleSubmit }) {
     </form>
   );
 }
+
+
+
 const LanguageSelector = ({ setLang, value }) =>
   <div class="select">
     <select value={value} onChange={e => {
