@@ -46,7 +46,7 @@ export default function App() {
   }
 
   
-  const handleSubmit = (inputText, languageCode) => {
+  const handleSubmit = (inputText, languageCode = "en") => {
     if (inputText.length != 0){
       const trimmedWhitespacesText = (inputText.replace(/  +/g, ' ')).trim(); //replace multiple spaces with one
       setSubmittedText(trimmedWhitespacesText)
