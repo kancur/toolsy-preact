@@ -1,5 +1,5 @@
 import DownloadButton from './DownloadButton'
-import { useSpring, useTransition, animated } from 'react-spring';
+import { useSpring, animated } from 'react-spring';
 import { useEffect, useState } from 'preact/hooks';
 import useMeasure from 'react-use-measure';
 import Skeleton from 'react-loading-skeleton';

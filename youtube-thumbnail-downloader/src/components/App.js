@@ -1,7 +1,5 @@
-import { Fragment } from 'preact';
-import { useState, useRef, useEffect } from 'preact/hooks';
+import { useState } from 'preact/hooks';
 import { InputForm } from './InputForm';
-import Thumbnail from './Thumbnail';
 import DisplayPart from './DisplayPart';
 
 export default function App() {
@@ -25,11 +23,9 @@ export default function App() {
 
   return (
     <div class="block" style={{ maxWidth: "800px" }}>
-      <div class="box">
-        <InputForm setVcode={setVcode} />
-      </div>
+      <InputForm setVcode={setVcode} />
       <div>
-          <DisplayPart data={thumbnails} />
+        <DisplayPart data={thumbnails} />
       </div>
     </div>
   );
