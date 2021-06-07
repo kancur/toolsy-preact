@@ -1,4 +1,4 @@
-import { useState } from 'preact/hooks';
+import { useMemo, useState } from 'preact/hooks';
 import { InputForm } from './InputForm';
 import DisplayPart from './DisplayPart';
 
@@ -14,12 +14,14 @@ export default function App() {
   }
 
 
-  const thumbnails = {
+  const thumbnailsGen = {
     "maxResDefault": generateThumbnailUrl(vcode, "maxresdefault"),
     "hqDefault": generateThumbnailUrl(vcode, "hqdefault"),
     "mqDefault": generateThumbnailUrl(vcode, "mqdefault"),
     "defaultThumb": generateThumbnailUrl(vcode, "default"),
   }
+
+  const thumbnails = useMemo(() => thumbnailsGen,[vcode]);
 
   return (
     <div class="block" style={{ maxWidth: "800px" }}>
