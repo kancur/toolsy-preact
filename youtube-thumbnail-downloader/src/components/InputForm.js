@@ -2,29 +2,34 @@ import { useState } from 'preact/hooks'
 import { useMediaQuery } from 'react-responsive'
 import useMeasure from 'react-use-measure';
 import { useSpring, animated } from 'react-spring';
+import { NotificationMessage } from './notificactionMessage/NotificationMessage'
 
-
-export function InputForm({ handleSubmit, setVcode }) {
+export function InputForm({ setVcode }) {
   const [inputText, setInputText] = useState()
   const [errorMsg, setErrorMsg] = useState()
   const [bind, { height }] = useMeasure()
-  const heightprops = useSpring({ height: (height == 0) ? 0 : height })
+  const heightSpring = useSpring({ height })
   const isSmall = useMediaQuery({
     query: '(max-device-width: 568px)'
   })
 
 
   function validate(input) {
-    if (input.includes("youtube.com/watch")) {
+    if (input.includes("youtube.com/watch") || input.includes("youtu.be/")) {
       return true
-    } else {
-      return false
     }
+    return false
   }
 
   function getVideoCode(urlstring) {
     const url = new URL(urlstring);
-    const video = url.searchParams.get('v')
+    let video = ""
+
+    if (urlstring.includes("youtu.be/")) {
+      video = (url.pathname).substring(1);
+    } else {
+      video = url.searchParams.get('v')
+    }
     return (video)
   }
 
@@ -45,7 +50,7 @@ export function InputForm({ handleSubmit, setVcode }) {
   }
 
   return (
-    <animated.div class="box p-0" style={{ overflow: 'hidden', ...heightprops }}>
+    <animated.div class="box p-0" style={{ overflow: 'hidden', ...heightSpring }}>
       <div ref={bind} class="p-5">
         <form onSubmit={onSubmit} class="block" >
           <div class="field has-addons">
@@ -79,9 +84,9 @@ export function InputForm({ handleSubmit, setVcode }) {
 
         {errorMsg &&
           <div class="block">
-            <div class="notification is-danger">
+            <NotificationMessage>
               {errorMsg}
-            </div>
+            </NotificationMessage>
           </div>
         }
 

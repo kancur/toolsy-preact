@@ -48,6 +48,7 @@
   },
   "dependencies": {
     "babel-plugin-transform-remove-console": "^6.9.4",
+    "postcss-loader": "^3.0.0",
     "react-loading-skeleton": "^2.2.0",
     "react-responsive": "^8.2.0",
     "react-spring": "^9.1.2",
