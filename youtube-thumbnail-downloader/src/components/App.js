@@ -22,7 +22,7 @@ export default function App() {
 
 
   return (
-    <div class="block" style={{ maxWidth: "800px" }}>
+    <div class="block" style={{ maxWidth: "800px", position: `relative` }}>
       <InputForm setVcode={setVcode} />
       <div>
         <DisplayPart data={thumbnails} />

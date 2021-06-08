@@ -3,12 +3,11 @@ import { useMediaQuery } from 'react-responsive'
 import useMeasure from 'react-use-measure';
 import { useSpring, animated } from 'react-spring';
 import { NotificationMessage } from './notificactionMessage/NotificationMessage'
+import { Fragment } from 'preact';
 
 export function InputForm({ setVcode }) {
   const [inputText, setInputText] = useState()
   const [errorMsg, setErrorMsg] = useState()
-  const [bind, { height }] = useMeasure()
-  const heightSpring = useSpring({ height })
   const isSmall = useMediaQuery({
     query: '(max-device-width: 568px)'
   })
@@ -37,24 +36,29 @@ export function InputForm({ setVcode }) {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    const url = withHttps(inputText);
 
-    if (validate(url)) {
-      setErrorMsg(null)
-      /* handleSubmit(getVideoCode(inputText)) */
-      setVcode(getVideoCode(url))
+    if (inputText) {
+      const url = withHttps(inputText);
+
+      if (validate(url)) {
+        setErrorMsg(null)
+        /* handleSubmit(getVideoCode(inputText)) */
+        setVcode(getVideoCode(url))
+      } else {
+        setErrorMsg("Please enter a valid youtube video URL")
+        setVcode(null)
+      }
     } else {
-      setErrorMsg("Please enter a valid youtube video URL")
-      setVcode(null)
+      setErrorMsg(null)
     }
   }
 
   return (
-    <animated.div class="box p-0" style={{ overflow: 'hidden', ...heightSpring }}>
-      <div ref={bind} class="p-5">
+    <Fragment>
+      <div class="box">
         <form onSubmit={onSubmit} class="block" >
           <div class="field has-addons">
-            <div class="control is-expanded">
+            <div class="control is-expanded is-relative" style={{zIndex: 1}}>
               <input
                 maxLength="300"
                 class="input"
@@ -62,6 +66,12 @@ export function InputForm({ setVcode }) {
                 placeholder="Paste a youtube video link"
                 onInput={e => setInputText(e.target.value)}
               />
+
+              <NotificationMessage show={errorMsg ? true : false}>
+                {errorMsg}
+              </NotificationMessage>
+
+
             </div>
             {
               !isSmall &&
@@ -82,16 +92,10 @@ export function InputForm({ setVcode }) {
           }
         </form>
 
-        {errorMsg &&
-          <div class="block">
-            <NotificationMessage>
-              {errorMsg}
-            </NotificationMessage>
-          </div>
-        }
-
       </div>
-    </animated.div>
+
+
+    </Fragment>
   );
 }
 
