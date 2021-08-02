@@ -1,7 +1,5 @@
 import { useState } from 'preact/hooks'
 import { useMediaQuery } from 'react-responsive'
-import useMeasure from 'react-use-measure';
-import { useSpring, animated } from 'react-spring';
 import { NotificationMessage } from './notificactionMessage/NotificationMessage'
 import { Fragment } from 'preact';
 
@@ -67,7 +65,7 @@ export function InputForm({ setVcode }) {
                 onInput={e => setInputText(e.target.value)}
               />
 
-              <NotificationMessage show={errorMsg ? true : false}>
+              <NotificationMessage show={!!errorMsg}>
                 {errorMsg}
               </NotificationMessage>
 
