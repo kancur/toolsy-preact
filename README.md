@@ -1,3 +1,3 @@
 # toolsy-preact
  
-Small apps build on preact, available at https://toolsy.dev/
+Small apps built on preact, available at https://toolsy.dev/
