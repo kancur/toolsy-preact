@@ -35,7 +35,7 @@ This tool suggests you tags to include in your youtube tags, based on a seed key
 ### Youtube Thumbnail Downloader
 This tool allows you to download thumbnails of a youtube video easily. To resolve cors issues with file downloading, it uses a **serverless cloudflare worker** as a proxy. The proxy is not authenticated in any way, but uses a whitelist that only allows it to be used on youtube img urls, greatly reducing it potential misuse.  
 
-**:link: [Try it out here](https://toolsy.dev/tools/youtube/youtube-tags-generator/)**
+**:link: [Try it out here](https://toolsy.dev/tools/youtube/youtube-thumbnail-downloader/)**
   
 <kbd>![youtube-thumbnail-downloader](https://user-images.githubusercontent.com/49352605/146640538-90dcccaa-3bc1-483e-81e1-fec9651336c8.png)</kbd>
 
