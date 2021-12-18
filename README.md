@@ -1,5 +1,5 @@
 # Toolsy
-A wordpress website featuring small apps built in preact (pretty much the same API as React, with a few extra and few missing features). The choice was made mainly due to tiny bundle size (preact doesn't have a SyntheticEvent wrapper but uses native addEventListener instead).
+A wordpress website featuring small apps built in preact (uses the same API as React). The choice was made mainly due to tiny bundle size (preact doesn't have a SyntheticEvent wrapper but uses native addEventListener instead, saving a lot in size).
 
 ## Live Version
 **:link: [Click here to visit Toolsy.dev](https://toolsy.dev/)**
